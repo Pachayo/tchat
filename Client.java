@@ -1,66 +1,99 @@
-package calculette;
+/**
+ *
+ * @author pachayo
+ * Avec l'aide de Baudouin des Vaux & Kerian Noel
+ */
+package calculator;
 
 import java.io.*;
 import java.net.*;
-import java.util.Scanner;
+import java.util.*;
 
 public class Client {
 
-	public static void main(String[] args) {
+    public static void main(String[] args) {
 
-		Socket socket;
-		BufferedReader in;
-		OutputStream outStream;
-		ObjectOutputStream out;
-		Scanner sc;
-		boolean waiting = true;
+        // Declaration des variables
+        boolean attente = true;
+        Socket socketClient;
+        BufferedReader entree;
+        Scanner sc;
+        OutputStream fluxSortie;
+        ObjectOutputStream objetSortie;
 
-		try {
-			// Cr�ation du socket qui va envoy� un demande de connection
-			socket = new Socket("localhost", 2009);
+        try {
+            
+            // On cree le socket qui va etre envoye au serveur
+            socketClient = new Socket("localhost", 35160);
 
-			in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-			outStream = socket.getOutputStream();
-			out = new ObjectOutputStream(outStream);
-			sc = new Scanner(System.in);
+            // On declare le buffer d entree tapee par le client
+            entree = new BufferedReader(new InputStreamReader(socketClient.getInputStream()));
+            
+            
+            //
+            sc = new Scanner(System.in);
 
-			while (waiting) {
-				System.out.print("Votre calcul svp:");
-				String calcul = sc.nextLine();
+            // On ouvre un flux de sortie
+            fluxSortie = socketClient.getOutputStream();
 
-				// Si le client envoie Over le client va aussi se fermer comme pour le serveur
-				if (calcul.equals("Over")) {
-					waiting = false;
-					
-					out.reset();
-					out.writeBoolean(waiting);
-					out.flush();
-					
-					// Attend la r�ponse du servuer
-					String result = in.readLine();
-					// Affiche la r�ponse du serveur
-					System.out.print(result + "\n");
-					
-					out.close();
-					in.close();
-					socket.close();
-				} else {
-					out.reset();
-					Calculus calc = new Calculus(calcul);
-					out.writeBoolean(waiting);
-					out.writeObject(calc);
-					out.flush();
-					
-					// Attend la r�ponse du servuer
-					String result = in.readLine();
-					// Affiche la r�ponse du serveur
-					System.out.print(result + "\n");
-				}
+            // On cree l objet qui passera par le flux de sortie
+            objetSortie = new ObjectOutputStream(fluxSortie);
+            
+            
+            System.out.print("Cette calculette ne prend pas en charge les flux de sortie \n");
+            
+            //Boucle pour le calcul
+            while (attente) {
+                System.out.print("Calcul:");
+                
+                // Le calcul du client est stocke dans le variable calculClient
+                String calculClient = sc.nextLine();
 
-			}
+                // Lorsque calculClient vaut "Stop" on passe attente a false et sort de la boucle
+                if (calculClient.equals("Stop")) {
+                    attente = false;
+                    
+                    //
+                    objetSortie.reset();
+                    
+                    //
+                    objetSortie.writeBoolean(attente);
+                    
+                    // On envoie l'objet
+                    objetSortie.flush();
 
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
+                    // On attend le retour du servuer
+                    String result = entree.readLine();
+                    
+                    // On affiche dans la console la reponse du serveur
+                    System.out.print(result + "\n");
+
+                    // On vide la mémoire
+                    objetSortie.close();
+                    entree.close();
+                    
+                    // On ferme la connexion
+                    socketClient.close();
+                } else {
+                    
+                    objetSortie.reset();
+                    Serialisation calc = new Serialisation(calculClient);
+                    objetSortie.writeBoolean(attente);
+                    objetSortie.writeObject(calc);
+                    
+                    // Envoie de l objet au serveur
+                    objetSortie.flush();
+
+                    // On attend la reponse du servuer
+                    String result = entree.readLine();
+                    // On affiche la reponse du serveur
+                    System.out.print("Resultat: " + result + "\n");
+                }
+
+            }
+
+        } catch (IOException e) {
+                e.printStackTrace();
+        }
+    }
 }
