@@ -34,15 +34,15 @@
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
-                      <Component id="tf_chat" min="-2" pref="352" max="-2" attributes="0"/>
+                      <Component id="champs_chat" min="-2" pref="352" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="b_send" max="32767" attributes="0"/>
                   </Group>
                   <Component id="jScrollPane1" max="32767" attributes="0"/>
                   <Group type="102" alignment="1" attributes="0">
-                      <Component id="lb_username" min="-2" pref="62" max="-2" attributes="0"/>
+                      <Component id="libellé_utilisateur" min="-2" pref="62" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="tf_username" min="-2" pref="89" max="-2" attributes="0"/>
+                      <Component id="champs_utilisateur" min="-2" pref="89" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="184" max="-2" attributes="0"/>
                       <Component id="b_connect" min="-2" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="2" max="-2" attributes="0"/>
@@ -61,15 +61,15 @@
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="b_connect" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="b_disconnect" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="lb_username" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="tf_username" alignment="3" max="32767" attributes="0"/>
+                  <Component id="libellé_utilisateur" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="champs_utilisateur" alignment="3" max="32767" attributes="0"/>
               </Group>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Component id="jScrollPane1" min="-2" pref="310" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                      <Component id="tf_chat" max="32767" attributes="0"/>
+                      <Component id="champs_chat" max="32767" attributes="0"/>
                   </Group>
                   <Group type="102" attributes="0">
                       <EmptySpace min="-2" pref="11" max="-2" attributes="0"/>
@@ -82,14 +82,14 @@
     </DimensionLayout>
   </Layout>
   <SubComponents>
-    <Component class="javax.swing.JLabel" name="lb_username">
+    <Component class="javax.swing.JLabel" name="libell&#xe9;_utilisateur">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Username :"/>
+        <Property name="text" type="java.lang.String" value="Pseudo :"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JTextField" name="tf_username">
+    <Component class="javax.swing.JTextField" name="champs_utilisateur">
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="tf_usernameActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="champs_utilisateurActionPerformed"/>
       </Events>
     </Component>
     <Component class="javax.swing.JButton" name="b_connect">
@@ -115,7 +115,7 @@
 
       <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
       <SubComponents>
-        <Component class="javax.swing.JTextArea" name="ta_chat">
+        <Component class="javax.swing.JTextArea" name="ContenuChat">
           <Properties>
             <Property name="columns" type="int" value="20"/>
             <Property name="rows" type="int" value="5"/>
@@ -123,7 +123,7 @@
         </Component>
       </SubComponents>
     </Container>
-    <Component class="javax.swing.JTextField" name="tf_chat">
+    <Component class="javax.swing.JTextField" name="champs_chat">
     </Component>
     <Component class="javax.swing.JButton" name="b_send">
       <Properties>

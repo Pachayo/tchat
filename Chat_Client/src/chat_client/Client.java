@@ -4,20 +4,21 @@ import java.net.*;
 import java.io.*;
 import java.util.*;
 
-public class client_frame extends javax.swing.JFrame 
+public class Client extends javax.swing.JFrame 
 {
-    String username, address = "localhost";
-    ArrayList<String> users = new ArrayList();
-    int port = 2222;
+    //Déclaration et instanciation des variables
+    String pseudo, address = "localhost";
+    ArrayList<String> utilisateurs = new ArrayList();
+    int port = 2205;
     Boolean isConnected = false;
     
-    Socket sock;
-    BufferedReader reader;
-    PrintWriter writer;
+    Socket socket;
+    BufferedReader bufferedR;
+    PrintWriter printW;
     
     //--------------------------//
     
-    public void ListenThread() 
+    public void ecouteThread() 
     {
          Thread IncomingReader = new Thread(new IncomingReader());
          IncomingReader.start();
@@ -25,27 +26,28 @@ public class client_frame extends javax.swing.JFrame
     
     //--------------------------//
     
-    public void userAdd(String data) 
+    public void ajoutUtilisateur(String donnees) 
     {
-         users.add(data);
+         utilisateurs.add(donnees);
     }
     
     //--------------------------//
     
-    public void userRemove(String data) 
+    public void suppressionU(String donnees) 
     {
-         ta_chat.append(data + " is now offline.\n");
+         ContenuChat.append(donnees + " est déconnecté.\n");
     }
     
     //--------------------------//
     
-    public void writeUsers() 
+    public void listeU() 
     {
-         String[] tempList = new String[(users.size())];
-         users.toArray(tempList);
+         String[] tempList = new String[(utilisateurs.size())];
+         utilisateurs.toArray(tempList);
          for (String token:tempList) 
          {
-             //users.append(token + "\n");
+             //Debug pour voir les participants
+             //ContenuChat.append(token + "\n");
          }
     }
     
@@ -53,14 +55,14 @@ public class client_frame extends javax.swing.JFrame
     
     public void sendDisconnect() 
     {
-        String bye = (username + ": :Disconnect");
+        String bye = (pseudo + ": :Disconnect");
         try
         {
-            writer.println(bye); 
-            writer.flush(); 
+            printW.println(bye); 
+            printW.flush(); 
         } catch (Exception e) 
         {
-            ta_chat.append("Could not send Disconnect message.\n");
+            ContenuChat.append("Impossible d'envoyer la deconnexion.\n");
         }
     }
 
@@ -70,17 +72,18 @@ public class client_frame extends javax.swing.JFrame
     {
         try 
         {
-            ta_chat.append("Disconnected.\n");
-            sock.close();
+            ContenuChat.append("Deconnecte.\n");
+            socket.close();
         } catch(Exception ex) {
-            ta_chat.append("Failed to disconnect. \n");
+            ContenuChat.append("Erreur dans la deconnexion. \n");
         }
         isConnected = false;
-        tf_username.setEditable(true);
+        //?????
+        champs_utilisateur.setEditable(true);
 
     }
     
-    public client_frame() 
+    public Client() 
     {
         initComponents();
     }
@@ -92,34 +95,34 @@ public class client_frame extends javax.swing.JFrame
         @Override
         public void run() 
         {
-            String[] data;
+            String[] donnees;
             String stream, done = "Done", connect = "Connect", disconnect = "Disconnect", chat = "Chat";
 
             try 
             {
-                while ((stream = reader.readLine()) != null) 
+                while ((stream = bufferedR.readLine()) != null) 
                 {
-                     data = stream.split(":");
+                     donnees = stream.split(":");
 
-                     if (data[2].equals(chat)) 
+                     if (donnees[2].equals(chat)) 
                      {
-                        ta_chat.append(data[0] + ": " + data[1] + "\n");
-                        ta_chat.setCaretPosition(ta_chat.getDocument().getLength());
+                        ContenuChat.append(donnees[0] + ": " + donnees[1] + "\n");
+                        ContenuChat.setCaretPosition(ContenuChat.getDocument().getLength());
                      } 
-                     else if (data[2].equals(connect))
+                     else if (donnees[2].equals(connect))
                      {
-                        ta_chat.removeAll();
-                        userAdd(data[0]);
+                        ContenuChat.removeAll();
+                        ajoutUtilisateur(donnees[0]);
                      } 
-                     else if (data[2].equals(disconnect)) 
+                     else if (donnees[2].equals(disconnect)) 
                      {
-                         userRemove(data[0]);
+                         suppressionU(donnees[0]);
                      } 
-                     else if (data[2].equals(done)) 
+                     else if (donnees[2].equals(done)) 
                      {
                         //users.setText("");
-                        writeUsers();
-                        users.clear();
+                        listeU();
+                        utilisateurs.clear();
                      }
                 }
            }catch(Exception ex) { }
@@ -133,13 +136,13 @@ public class client_frame extends javax.swing.JFrame
     private void initComponents() {
 
         jSpinner1 = new javax.swing.JSpinner();
-        lb_username = new javax.swing.JLabel();
-        tf_username = new javax.swing.JTextField();
+        libellé_utilisateur = new javax.swing.JLabel();
+        champs_utilisateur = new javax.swing.JTextField();
         b_connect = new javax.swing.JButton();
         b_disconnect = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        ta_chat = new javax.swing.JTextArea();
-        tf_chat = new javax.swing.JTextField();
+        ContenuChat = new javax.swing.JTextArea();
+        champs_chat = new javax.swing.JTextField();
         b_send = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -147,11 +150,11 @@ public class client_frame extends javax.swing.JFrame
         setName("client"); // NOI18N
         setResizable(false);
 
-        lb_username.setText("Username :");
+        libellé_utilisateur.setText("Pseudo :");
 
-        tf_username.addActionListener(new java.awt.event.ActionListener() {
+        champs_utilisateur.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                tf_usernameActionPerformed(evt);
+                champs_utilisateurActionPerformed(evt);
             }
         });
 
@@ -169,9 +172,9 @@ public class client_frame extends javax.swing.JFrame
             }
         });
 
-        ta_chat.setColumns(20);
-        ta_chat.setRows(5);
-        jScrollPane1.setViewportView(ta_chat);
+        ContenuChat.setColumns(20);
+        ContenuChat.setRows(5);
+        jScrollPane1.setViewportView(ContenuChat);
 
         b_send.setText("SEND");
         b_send.addActionListener(new java.awt.event.ActionListener() {
@@ -188,14 +191,14 @@ public class client_frame extends javax.swing.JFrame
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(tf_chat, javax.swing.GroupLayout.PREFERRED_SIZE, 352, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(champs_chat, javax.swing.GroupLayout.PREFERRED_SIZE, 352, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(b_send, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addComponent(jScrollPane1)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(lb_username, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(libellé_utilisateur, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(tf_username, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(champs_utilisateur, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(184, 184, 184)
                         .addComponent(b_connect)
                         .addGap(2, 2, 2)
@@ -210,14 +213,14 @@ public class client_frame extends javax.swing.JFrame
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(b_connect)
                     .addComponent(b_disconnect)
-                    .addComponent(lb_username)
-                    .addComponent(tf_username))
+                    .addComponent(libellé_utilisateur)
+                    .addComponent(champs_utilisateur))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 310, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(tf_chat))
+                        .addComponent(champs_chat))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(11, 11, 11)
                         .addComponent(b_send, javax.swing.GroupLayout.DEFAULT_SIZE, 81, Short.MAX_VALUE)))
@@ -227,37 +230,37 @@ public class client_frame extends javax.swing.JFrame
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void tf_usernameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tf_usernameActionPerformed
+    private void champs_utilisateurActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_champs_utilisateurActionPerformed
     
-    }//GEN-LAST:event_tf_usernameActionPerformed
+    }//GEN-LAST:event_champs_utilisateurActionPerformed
 
     private void b_connectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_connectActionPerformed
         if (isConnected == false) 
         {
-            username = tf_username.getText();
-            tf_username.setEditable(false);
+            pseudo = champs_utilisateur.getText();
+            champs_utilisateur.setEditable(false);
 
             try 
             {
-                sock = new Socket(address, port);
-                InputStreamReader streamreader = new InputStreamReader(sock.getInputStream());
-                reader = new BufferedReader(streamreader);
-                writer = new PrintWriter(sock.getOutputStream());
-                writer.println(username + ":has connected.:Connect");
-                writer.flush(); 
+                socket = new Socket(address, port);
+                InputStreamReader streamreader = new InputStreamReader(socket.getInputStream());
+                bufferedR = new BufferedReader(streamreader);
+                printW = new PrintWriter(socket.getOutputStream());
+                printW.println(pseudo + ":est connecté.:Connect");
+                printW.flush(); 
                 isConnected = true; 
             } 
             catch (Exception ex) 
             {
-                ta_chat.append("Cannot Connect! Try Again. \n");
-                tf_username.setEditable(true);
+                ContenuChat.append("Impossible de se connecter! \n");
+                champs_utilisateur.setEditable(true);
             }
             
-            ListenThread();
+            ecouteThread();
             
         } else if (isConnected == true) 
         {
-            ta_chat.append("You are already connected. \n");
+            ContenuChat.append("Vous êtes déjà connecté. \n");
         }
     }//GEN-LAST:event_b_connectActionPerformed
 
@@ -267,23 +270,23 @@ public class client_frame extends javax.swing.JFrame
     }//GEN-LAST:event_b_disconnectActionPerformed
 
     private void b_sendActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_sendActionPerformed
-        String nothing = "";
-        if ((tf_chat.getText()).equals(nothing)) {
-            tf_chat.setText("");
-            tf_chat.requestFocus();
+        String temp = "";
+        if ((champs_chat.getText()).equals(temp)) {
+            champs_chat.setText("");
+            champs_chat.requestFocus();
         } else {
             try {
-               writer.println(username + ":" + tf_chat.getText() + ":" + "Chat");
-               writer.flush(); // flushes the buffer
+               printW.println(pseudo + ":" + champs_chat.getText() + ":" + "Chat");
+               printW.flush(); // flushes the buffer
             } catch (Exception ex) {
-                ta_chat.append("Message was not sent. \n");
+                ContenuChat.append("Le message n a pas ete envoye. \n");
             }
-            tf_chat.setText("");
-            tf_chat.requestFocus();
+            champs_chat.setText("");
+            champs_chat.requestFocus();
         }
 
-        tf_chat.setText("");
-        tf_chat.requestFocus();
+        champs_chat.setText("");
+        champs_chat.requestFocus();
     }//GEN-LAST:event_b_sendActionPerformed
 
     public static void main(String args[]) 
@@ -293,20 +296,20 @@ public class client_frame extends javax.swing.JFrame
             @Override
             public void run() 
             {
-                new client_frame().setVisible(true);
+                new Client().setVisible(true);
             }
         });
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextArea ContenuChat;
     private javax.swing.JButton b_connect;
     private javax.swing.JButton b_disconnect;
     private javax.swing.JButton b_send;
+    private javax.swing.JTextField champs_chat;
+    private javax.swing.JTextField champs_utilisateur;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSpinner jSpinner1;
-    private javax.swing.JLabel lb_username;
-    private javax.swing.JTextArea ta_chat;
-    private javax.swing.JTextField tf_chat;
-    private javax.swing.JTextField tf_username;
+    private javax.swing.JLabel libellé_utilisateur;
     // End of variables declaration//GEN-END:variables
 }
