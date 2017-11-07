@@ -4,7 +4,7 @@
  * Avec l'aide de Baudouin des Vaux & Kerian Noel
  */
 
-package calculator;
+package tchat;
 
 import java.io.*;
 import java.net.*;
