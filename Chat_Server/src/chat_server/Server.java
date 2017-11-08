@@ -37,7 +37,6 @@ public class Server extends javax.swing.JFrame
        public void run() 
        {
             //Déclaration et instanciation des variables
-            //true ou false pour connect,.. ??????
             String message, connect = "Connect", disconnect = "Disconnect", chat = "Chat" ;
             String[] donnees;
 
@@ -48,23 +47,24 @@ public class Server extends javax.swing.JFrame
                 {
                     ContenuChat.append("Reçu: " + message + "\n");
                     //Séparation des infos contenu dans le message séparées par ":"
+                    // on parse le message
                     donnees = message.split(":");
                     
                     //Ajout des infos mise en forme
-                    for (String temp:donnees) 
-                    {
-                        ContenuChat.append(temp + "\n");
-                    }
-                    //ContenuChat.append("data2 : "+data[2]+"\n");
+                    //for (String temp:donnees) 
+                    //{
+                    //    ContenuChat.append(temp + "\n");
+                    //}
+                    
                     if (donnees[2].equals(connect)) 
                     {
                         diffusionGenerale((donnees[0] + ":" + donnees[1] + ":" + chat));
-                        ajoutUtilisateurs(donnees[0]);
+                        //ajoutUtilisateurs(donnees[0]);
                     } 
                     else if (donnees[2].equals(disconnect)) 
                     {
                         diffusionGenerale((donnees[0] + ":est deconnecte." + ":" + chat));
-                        userRemove(donnees[0]);
+                        //suppressionUtilisateur(donnees[0]);
                     } 
                     else if (donnees[2].equals(chat)) 
                     {
@@ -189,37 +189,37 @@ public class Server extends javax.swing.JFrame
         }
     }
     
-    public void ajoutUtilisateurs (String data) 
-    {
-        String message, add = ": :Connect", done = "Server: :Done", name = data;
-        
-        utilisateurs.add(name);
-        ContenuChat.append("Apres ajout de " + name + ". \n");
-        String[] tempList = new String[(utilisateurs.size())];
-        utilisateurs.toArray(tempList);
+    //public void ajoutUtilisateurs (String data) 
+    //{
+    //    String message, add = ": :Connect", done = "Server: :Done", name = data;
+    //    
+    //    utilisateurs.add(name);
+    //    ContenuChat.append("Apres ajout de " + name + ". \n");
+    //    String[] tempList = new String[(utilisateurs.size())];
+    //    utilisateurs.toArray(tempList);
 
-        for (String token:tempList) 
-        {
-            message = (token + add);
-            diffusionGenerale(message);
-        }
-        diffusionGenerale(done);
-    }
+    //    for (String token:tempList) 
+    //    {
+    //        message = (token + add);
+    //        diffusionGenerale(message);
+    //    }
+    //    diffusionGenerale(done);
+    //}
     
-    public void userRemove (String donnees) 
-    {
-        String message, add = ": :Connect", done = "Server: :Done", name = donnees;
-        utilisateurs.remove(name);
-        String[] tempList = new String[(utilisateurs.size())];
-        utilisateurs.toArray(tempList);
+    //public void suppressionUtilisateur (String donnees) 
+    //{
+    //    String message, add = ": :Connect", done = "Server: :Done", name = donnees;
+    //    utilisateurs.remove(name);
+    //    String[] tempList = new String[(utilisateurs.size())];
+    //    utilisateurs.toArray(tempList);
 
-        for (String token:tempList) 
-        {
-            message = (token + add);
-            diffusionGenerale(message);
-        }
-        diffusionGenerale(done);
-    }
+    //    for (String token:tempList) 
+    //    {
+    //        message = (token + add);
+    //        diffusionGenerale(message);
+    //    }
+    //    diffusionGenerale(done);
+    //}
     
     public void diffusionGenerale(String message) 
     {
@@ -232,7 +232,6 @@ public class Server extends javax.swing.JFrame
                 PrintWriter printerW = (PrintWriter) it.next();
 		printerW.println(message);
 		ContenuChat.append("Envoyé: " + message + "\n");
-                //ContenuChat.append(data[0] + "(envoie): " + data[] + "\n");
                 printerW.flush();
                 ContenuChat.setCaretPosition(ContenuChat.getDocument().getLength());
 

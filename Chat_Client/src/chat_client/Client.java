@@ -13,7 +13,9 @@ public class Client extends javax.swing.JFrame
     Boolean isConnected = false;
     
     Socket socket;
+    //lire la reception du serv
     BufferedReader bufferedR;
+    //envoyer au serv
     PrintWriter printW;
     
     //--------------------------//
@@ -93,6 +95,7 @@ public class Client extends javax.swing.JFrame
     public class IncomingReader implements Runnable
     {
         @Override
+        // reecrite car il y a deja une def de la fonction run
         public void run() 
         {
             String[] donnees;
@@ -102,16 +105,18 @@ public class Client extends javax.swing.JFrame
             {
                 while ((stream = bufferedR.readLine()) != null) 
                 {
+                    // on separe a tout les :
                      donnees = stream.split(":");
 
                      if (donnees[2].equals(chat)) 
                      {
                         ContenuChat.append(donnees[0] + ": " + donnees[1] + "\n");
+                        
+                        //permet de scroll automatiquement avec la taille totale qu il y a dans le chat
                         ContenuChat.setCaretPosition(ContenuChat.getDocument().getLength());
                      } 
                      else if (donnees[2].equals(connect))
                      {
-                        ContenuChat.removeAll();
                         ajoutUtilisateur(donnees[0]);
                      } 
                      else if (donnees[2].equals(disconnect)) 
@@ -120,7 +125,6 @@ public class Client extends javax.swing.JFrame
                      } 
                      else if (donnees[2].equals(done)) 
                      {
-                        //users.setText("");
                         listeU();
                         utilisateurs.clear();
                      }
@@ -237,7 +241,9 @@ public class Client extends javax.swing.JFrame
     private void b_connectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_connectActionPerformed
         if (isConnected == false) 
         {
+            //on prend la valeur pour le nm de l user
             pseudo = champs_utilisateur.getText();
+            //on grise le champ utilisateur
             champs_utilisateur.setEditable(false);
 
             try 
@@ -256,6 +262,7 @@ public class Client extends javax.swing.JFrame
                 champs_utilisateur.setEditable(true);
             }
             
+            // On creer et start un thread
             ecouteThread();
             
         } else if (isConnected == true) 
@@ -282,6 +289,7 @@ public class Client extends javax.swing.JFrame
                 ContenuChat.append("Le message n a pas ete envoye. \n");
             }
             champs_chat.setText("");
+            //Focus --> le curseur retourne dans la zone d ecriture le message
             champs_chat.requestFocus();
         }
 
