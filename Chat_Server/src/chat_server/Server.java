@@ -37,7 +37,7 @@ public class Server extends javax.swing.JFrame
        public void run() 
        {
             //Déclaration et instanciation des variables
-            String message, connect = "Connect", disconnect = "Disconnect", chat = "Chat" ;
+            String message, connect = "Connect", chat = "Chat" ;
             String[] donnees;
 
             try 
@@ -50,21 +50,9 @@ public class Server extends javax.swing.JFrame
                     // on parse le message
                     donnees = message.split(":");
                     
-                    //Ajout des infos mise en forme
-                    //for (String temp:donnees) 
-                    //{
-                    //    ContenuChat.append(temp + "\n");
-                    //}
-                    
                     if (donnees[2].equals(connect)) 
                     {
                         diffusionGenerale((donnees[0] + ":" + donnees[1] + ":" + chat));
-                        //ajoutUtilisateurs(donnees[0]);
-                    } 
-                    else if (donnees[2].equals(disconnect)) 
-                    {
-                        diffusionGenerale((donnees[0] + ":est deconnecte." + ":" + chat));
-                        //suppressionUtilisateur(donnees[0]);
                     } 
                     else if (donnees[2].equals(chat)) 
                     {
@@ -189,37 +177,6 @@ public class Server extends javax.swing.JFrame
         }
     }
     
-    //public void ajoutUtilisateurs (String data) 
-    //{
-    //    String message, add = ": :Connect", done = "Server: :Done", name = data;
-    //    
-    //    utilisateurs.add(name);
-    //    ContenuChat.append("Apres ajout de " + name + ". \n");
-    //    String[] tempList = new String[(utilisateurs.size())];
-    //    utilisateurs.toArray(tempList);
-
-    //    for (String token:tempList) 
-    //    {
-    //        message = (token + add);
-    //        diffusionGenerale(message);
-    //    }
-    //    diffusionGenerale(done);
-    //}
-    
-    //public void suppressionUtilisateur (String donnees) 
-    //{
-    //    String message, add = ": :Connect", done = "Server: :Done", name = donnees;
-    //    utilisateurs.remove(name);
-    //    String[] tempList = new String[(utilisateurs.size())];
-    //    utilisateurs.toArray(tempList);
-
-    //    for (String token:tempList) 
-    //    {
-    //        message = (token + add);
-    //        diffusionGenerale(message);
-    //    }
-    //    diffusionGenerale(done);
-    //}
     
     public void diffusionGenerale(String message) 
     {

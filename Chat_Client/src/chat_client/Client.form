@@ -36,18 +36,15 @@
                   <Group type="102" attributes="0">
                       <Component id="champs_chat" min="-2" pref="352" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="b_send" max="32767" attributes="0"/>
+                      <Component id="b_send" pref="195" max="32767" attributes="0"/>
                   </Group>
                   <Component id="jScrollPane1" max="32767" attributes="0"/>
                   <Group type="102" alignment="1" attributes="0">
                       <Component id="libellé_utilisateur" min="-2" pref="62" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="champs_utilisateur" min="-2" pref="89" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="184" max="-2" attributes="0"/>
+                      <EmptySpace max="32767" attributes="0"/>
                       <Component id="b_connect" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="2" max="-2" attributes="0"/>
-                      <Component id="b_disconnect" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                   </Group>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
@@ -60,7 +57,6 @@
               <EmptySpace min="-2" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="b_connect" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="b_disconnect" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="libellé_utilisateur" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="champs_utilisateur" alignment="3" max="32767" attributes="0"/>
               </Group>
@@ -98,14 +94,6 @@
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="b_connectActionPerformed"/>
-      </Events>
-    </Component>
-    <Component class="javax.swing.JButton" name="b_disconnect">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="Disconnect"/>
-      </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="b_disconnectActionPerformed"/>
       </Events>
     </Component>
     <Container class="javax.swing.JScrollPane" name="jScrollPane1">

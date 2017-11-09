@@ -25,65 +25,12 @@ public class Client extends javax.swing.JFrame
          Thread IncomingReader = new Thread(new IncomingReader());
          IncomingReader.start();
     }
-    
-    //--------------------------//
-    
-    public void ajoutUtilisateur(String donnees) 
-    {
-         utilisateurs.add(donnees);
-    }
-    
-    //--------------------------//
-    
-    public void suppressionU(String donnees) 
-    {
-         ContenuChat.append(donnees + " est déconnecté.\n");
-    }
-    
-    //--------------------------//
-    
-    public void listeU() 
-    {
-         String[] tempList = new String[(utilisateurs.size())];
-         utilisateurs.toArray(tempList);
-         for (String token:tempList) 
-         {
-             //Debug pour voir les participants
-             //ContenuChat.append(token + "\n");
-         }
-    }
-    
-    //--------------------------//
-    
-    public void sendDisconnect() 
-    {
-        String bye = (pseudo + ": :Disconnect");
-        try
-        {
-            printW.println(bye); 
-            printW.flush(); 
-        } catch (Exception e) 
-        {
-            ContenuChat.append("Impossible d'envoyer la deconnexion.\n");
-        }
-    }
 
     //--------------------------//
     
-    public void Disconnect() 
-    {
-        try 
-        {
-            ContenuChat.append("Deconnecte.\n");
-            socket.close();
-        } catch(Exception ex) {
-            ContenuChat.append("Erreur dans la deconnexion. \n");
-        }
-        isConnected = false;
-        //?????
-        champs_utilisateur.setEditable(true);
 
-    }
+    //--------------------------//
+    
     
     public Client() 
     {
@@ -99,7 +46,7 @@ public class Client extends javax.swing.JFrame
         public void run() 
         {
             String[] donnees;
-            String stream, done = "Done", connect = "Connect", disconnect = "Disconnect", chat = "Chat";
+            String stream, connect = "Connect", chat = "Chat";
 
             try 
             {
@@ -117,16 +64,7 @@ public class Client extends javax.swing.JFrame
                      } 
                      else if (donnees[2].equals(connect))
                      {
-                        ajoutUtilisateur(donnees[0]);
-                     } 
-                     else if (donnees[2].equals(disconnect)) 
-                     {
-                         suppressionU(donnees[0]);
-                     } 
-                     else if (donnees[2].equals(done)) 
-                     {
-                        listeU();
-                        utilisateurs.clear();
+                         
                      }
                 }
            }catch(Exception ex) { }
@@ -143,7 +81,6 @@ public class Client extends javax.swing.JFrame
         libellé_utilisateur = new javax.swing.JLabel();
         champs_utilisateur = new javax.swing.JTextField();
         b_connect = new javax.swing.JButton();
-        b_disconnect = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         ContenuChat = new javax.swing.JTextArea();
         champs_chat = new javax.swing.JTextField();
@@ -169,13 +106,6 @@ public class Client extends javax.swing.JFrame
             }
         });
 
-        b_disconnect.setText("Disconnect");
-        b_disconnect.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                b_disconnectActionPerformed(evt);
-            }
-        });
-
         ContenuChat.setColumns(20);
         ContenuChat.setRows(5);
         jScrollPane1.setViewportView(ContenuChat);
@@ -197,17 +127,14 @@ public class Client extends javax.swing.JFrame
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(champs_chat, javax.swing.GroupLayout.PREFERRED_SIZE, 352, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(b_send, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(b_send, javax.swing.GroupLayout.DEFAULT_SIZE, 195, Short.MAX_VALUE))
                     .addComponent(jScrollPane1)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(libellé_utilisateur, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(champs_utilisateur, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(184, 184, 184)
-                        .addComponent(b_connect)
-                        .addGap(2, 2, 2)
-                        .addComponent(b_disconnect)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(b_connect)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -216,7 +143,6 @@ public class Client extends javax.swing.JFrame
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(b_connect)
-                    .addComponent(b_disconnect)
                     .addComponent(libellé_utilisateur)
                     .addComponent(champs_utilisateur))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -271,11 +197,6 @@ public class Client extends javax.swing.JFrame
         }
     }//GEN-LAST:event_b_connectActionPerformed
 
-    private void b_disconnectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_disconnectActionPerformed
-        sendDisconnect();
-        Disconnect();
-    }//GEN-LAST:event_b_disconnectActionPerformed
-
     private void b_sendActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_sendActionPerformed
         String temp = "";
         if ((champs_chat.getText()).equals(temp)) {
@@ -312,7 +233,6 @@ public class Client extends javax.swing.JFrame
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextArea ContenuChat;
     private javax.swing.JButton b_connect;
-    private javax.swing.JButton b_disconnect;
     private javax.swing.JButton b_send;
     private javax.swing.JTextField champs_chat;
     private javax.swing.JTextField champs_utilisateur;
