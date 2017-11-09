@@ -18,26 +18,16 @@ public class Client extends javax.swing.JFrame
     //envoyer au serv
     PrintWriter printW;
     
-    //--------------------------//
-    
     public void ecouteThread() 
     {
          Thread IncomingReader = new Thread(new IncomingReader());
          IncomingReader.start();
     }
 
-    //--------------------------//
-    
-
-    //--------------------------//
-    
-    
     public Client() 
     {
         initComponents();
     }
-    
-    //--------------------------//
     
     public class IncomingReader implements Runnable
     {
@@ -70,8 +60,6 @@ public class Client extends javax.swing.JFrame
            }catch(Exception ex) { }
         }
     }
-
-    //--------------------------//
     
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
