@@ -17,9 +17,9 @@ public class Server extends javax.swing.JFrame
        PrintWriter client;
 
        //Ajout des clients ?
-       public GestionClient(Socket clientSocket, PrintWriter utilisateurs) 
+       public GestionClient(Socket clientSocket, PrintWriter utilisateur) 
        {
-            client = utilisateurs;
+            client = utilisateur;
             try 
             {
                 socket = clientSocket;
